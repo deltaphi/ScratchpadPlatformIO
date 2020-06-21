@@ -1,6 +1,8 @@
 name: PlatformIO Environment
 
-on: [push]
+on: 
+  push:
+    [branches]
 
 jobs:
   build:
