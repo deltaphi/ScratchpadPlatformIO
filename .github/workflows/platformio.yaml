@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - "*"
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -23,3 +25,19 @@ jobs:
         pip install platformio
     - name: Run PlatformIO for Bluepill
       run: platformio run -d ${{ github.workspace }}
+  release:
+    name: Store Release artifacts
+    runs-on: ubuntu-latest
+    if: github.event == "release"
+    
+    needs: "build"
+    steps:
+      - name: Gather the Release artifacts
+        shell: bash  
+        run: ${{ github.workspace }}/.github/copy-release-files.sh
+      - name: Upload the artifacts
+        uses: skx/github-action-publish-binaries@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: '.github/releasefiles/*'
