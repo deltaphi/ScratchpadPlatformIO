@@ -28,7 +28,7 @@ jobs:
   release:
     name: Store Release artifacts
     runs-on: ubuntu-latest
-    if: github.event == 'release'
+    if: github.event.release
 
     needs: "build"
     steps:
